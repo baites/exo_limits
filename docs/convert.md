@@ -1,4 +1,4 @@
-## Summary
+## convert_main.py
 
 The script will convert high mass YAML data to the format accepted by plotting
 tool.
