@@ -11,7 +11,7 @@ from optparse import OptionParser
 import os
 import sys
 
-from convert import convert
+from util.convert import convert
 
 def main():
     '''Run application without arguments to get help message'''
