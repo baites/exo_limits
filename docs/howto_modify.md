@@ -31,3 +31,8 @@ git push origin master
 press **pull request** button in the top right corner
 - The administrator of the original project will be notified about changes and
 propagate your fixes/new features to the main repository
+
+## Fix(es)
+
+please, fix any error(s), typo(s) you may find anywere in the project including the
+documentation.
