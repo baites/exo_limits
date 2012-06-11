@@ -8,7 +8,8 @@ tool.
 ```bash
 # get help
 ./convert_main.py
-./convert_main.py
+./convert_main.py -h
+./convert_main.py --help
 #
 # basic run
 ./convert_main.py input.yaml output.yaml
