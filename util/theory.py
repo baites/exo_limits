@@ -5,6 +5,8 @@ Created by Samvel Khalatyan, Jun 08, 2012
 Copyright 2012, All rights reserved
 '''
 
+from __future__ import division
+
 def zprime(width, use_old=False):
     '''
     Zprime theoretical cross-sections
