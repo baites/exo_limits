@@ -26,7 +26,7 @@ def gev_to_tev(values):
 
     return [x * 1e-3 for x in values]
 
-def plot(limit_type, low_mass, high_mass, logy=True):
+def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
     '''
     Application entry point
     '''
@@ -73,7 +73,8 @@ def plot(limit_type, low_mass, high_mass, logy=True):
                                                         low_mass_x=True,
                                                         transform_x=gev_to_tev)
 
-    smooth.data(limits.high["visible"], n=2)
+    if smooth_data:
+        smooth.data(limits.high["visible"], n=2)
 
     legend = ROOT.TLegend(0.5, 0.50, 0.80, 0.88)
 

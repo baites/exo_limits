@@ -30,6 +30,10 @@ def parser():
                       action="store_true", default=False,
                       help="verbose yaml convertion")
 
+    parser.add_option("--no-smooth",
+                      action="store_true", default=False,
+                      help="Turn-off smoothing")
+
     return parser
 
 def main():
@@ -56,7 +60,8 @@ def main():
         # import templates only here otherwise PyROOT inhercepts --help option
         from util.overlay import plot
 
-        plot(options.type_.lower(), *args, logy=not options.no_log)
+        plot(options.type_.lower(), *args, logy=not options.no_log,
+             smooth_data=not options.no_smooth)
     except HelpExit:
         option_parser.print_help()
 
