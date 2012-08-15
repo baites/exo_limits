@@ -19,7 +19,7 @@ def canvas(cv):
     pad.SetBottomMargin(0.15)
     pad.SetLeftMargin(0.15)
 
-def combo(obj, xtitle="t#bar{t} Invariant Mass [TeV/c^{2}]",
+def combo(obj, xtitle="M_{t#bar{t}} [TeV]",
           ytitle="Upper Limit #sigma_{Z'} x B [pb]", maximum=1e1):
     '''Adjust TMultiGraph style'''
 

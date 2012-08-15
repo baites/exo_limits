@@ -138,6 +138,7 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
     graph = ROOT.TGraph(len(cur["observed_x"]), cur["observed_x"], cur["observed"])
     graph.SetLineColor(ROOT.kRed + 1)
     graph.SetLineWidth(line_width)
+    graph.SetLineStyle(2)
     combo.Add(graph)
     legend.AddEntry(graph, "Observed (95% CL)", "l")
 
@@ -145,6 +146,7 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
     graph = ROOT.TGraph(len(cur["observed_x"]), cur["observed_x"], cur["observed"])
     graph.SetLineColor(ROOT.kRed + 1)
     graph.SetLineWidth(line_width)
+    graph.SetLineStyle(2)
     combo.Add(graph)
 
     # Theory
@@ -168,7 +170,7 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
         graph = ROOT.TGraph(len(x), array('d', x), array('d', y))
         graph.SetLineColor([ROOT.kBlue + 1, ROOT.kMagenta + 1, ROOT.kGreen + 1][index] if index < 3 else ROOT.kBlue + 1)
         graph.SetLineWidth(3)
-        graph.SetLineStyle(2)
+        graph.SetLineStyle(9)
         combo.Add(graph)
         legend.AddEntry(graph, label, "l")
 
@@ -176,6 +178,7 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
         theory_data.x = x
         theory_data.y = y
 
+        '''
         print("low mass".capitalize())
         expected_exclusion, observed_exclusion = exclude(limits.low["visible"], theory_data)
 
@@ -188,9 +191,10 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
 
         print("Expected exclusion:", expected_exclusion)
         print("Observed exclusion:", observed_exclusion)
+        '''
 
-    legend.AddEntry(g_1s_lm, "#pm 1 s.d. Expected", "f")
-    legend.AddEntry(g_2s_lm, "#pm 2 s.d. Expected", "f")
+    legend.AddEntry(g_1s_lm, "#pm 1 #sigma Expected", "f")
+    legend.AddEntry(g_2s_lm, "#pm 2 #sigma Expected", "f")
 
     # Draw
     cv = ROOT.TCanvas()
@@ -204,7 +208,7 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
         line.SetPoint(0, split_point * 1e-3, 1e1)
         line.SetPoint(1, split_point * 1e-3, 3e-2)
         line.SetLineColor(ROOT.kGray + 2)
-        line.SetLineStyle(2)
+        line.SetLineStyle(9)
         line.SetLineWidth(3)
         line.Draw("L")
 
@@ -213,16 +217,20 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
     if logy:
         cv.SetLogy(True)
 
-    style.combo(combo, maximum=1e2 if logy else None)
+    if limit_type == 'kk':
+        style.combo(combo, maximum=1e2 if logy else None, ytitle="Upper Limit #sigma_{KK} x B [pb]")
+    else:
+        style.combo(combo, maximum=1e2 if logy else None)
+
     style.legend(legend)
     legend.SetTextSize(0.04)
 
     plot_labels = labels.create({
         #"narrow": "{0:.1f}% Width Assumption".format(theory_width if theory_width else 0),
-        "narrow": "Narrow Width Assumption",
+        "narrow": "Z' with 1.2% Decay Width",
  
-        "wide": "10% Width Assumption",
-        "kk": "KK Gluon Assumption"}.get(limit_type, None))
+        "wide": "Z' with 10% Decay Width",
+        "kk": "KK Gluon"}.get(limit_type, None))
     map(ROOT.TObject.Draw, plot_labels)
 
     cv.Update()
