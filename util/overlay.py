@@ -193,8 +193,8 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
         print("Observed exclusion:", observed_exclusion)
         '''
 
-    legend.AddEntry(g_1s_lm, "#pm 1 #sigma Expected", "f")
-    legend.AddEntry(g_2s_lm, "#pm 2 #sigma Expected", "f")
+    legend.AddEntry(g_1s_lm, "Expected #pm 1 s.d.", "f")
+    legend.AddEntry(g_2s_lm, "Expected #pm 2 s.d.", "f")
 
     # Draw
     cv = ROOT.TCanvas()

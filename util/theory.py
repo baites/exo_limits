@@ -48,7 +48,7 @@ def zprime(width, use_old=False):
         raise RuntimeError("only {0!r} Z' widths are supported".format(
             xsections.keys()))
 
-    label = "Z' {0:.1f}% width, Harris et al".format(width)
+    label = "Z' {0:.1f}% width".format(width)
 
     if use_old:
         x, y = old(width)
