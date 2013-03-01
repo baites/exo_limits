@@ -31,7 +31,7 @@ def load_file(filename):
 
     return data
 
-def load_data(**kargs):
+def load_data(low,high, scale_low=1.0, scale_high=1.0):
     '''
     Load several YAML files and put into Data object
 
@@ -48,10 +48,18 @@ def load_data(**kargs):
     data = Data()
 
     # Load each and every file specified in argument(s)
-    for k, v in kargs.items():
-        data.__dict__[k] = load_file(v)
+    data.low = load_file(low)
+    data.high = load_file(high)
+
+    if scale_low != 1.0:
+        for key in data.low:
+            data.low[key] = [scale_low*x for x in data.low[key]]
+    if scale_high != 1.0:
+        for key in data.high:
+            data.high[key] = [scale_high*x for x in data.high[key]]
 
     return data
+
 
 def get_limits(data, is_low_mass=True, split_point=1000, low_mass_x=False,
                transform_x=None):
@@ -87,12 +95,11 @@ def get_limits(data, is_low_mass=True, split_point=1000, low_mass_x=False,
         if k == split_point:
             if k in data:
                 if low_mass_x and is_low_mass:
-                    fill(data, k, visible, x=k - 10)
-                    fill(data, k, invisible, x=k - 10)
+                    fill(data, k, visible, x=k - 1)
+                    fill(data, k, invisible, x=k - 1)
                 else:
                     fill(data, k, visible)
                     fill(data, k, invisible)
-
             continue
 
         if is_low_mass:

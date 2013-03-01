@@ -13,16 +13,12 @@ def create(title=None):
     Two labels will be returned: CMS experiment with luminosity and sub-title.
     '''
 
-    experiment = ROOT.TLatex(0.97, 0.92,
-                             "CMS, 4.4-5.0 fb^{-1}, #sqrt{s} = 7 TeV")
+    experiment = ROOT.TLatex(0.15, 0.92,
+                             "CMS, L = 19.6 fb^{-1}, #sqrt{s} = 8 TeV")
     experiment.SetNDC() # Use canvas coordinates
-    experiment.SetTextAlign(31)
     experiment.SetTextFont(62)
     experiment.SetTextSize(0.046)
 
-    return experiment, 
-
-    '''
     sub_title = ROOT.TLatex(0.97, 0.92, title if title else "")
     sub_title.SetNDC() # Use canvas coordinates
     sub_title.SetTextAlign(31)
@@ -30,4 +26,3 @@ def create(title=None):
     sub_title.SetTextSize(0.046)
 
     return experiment, sub_title
-    '''

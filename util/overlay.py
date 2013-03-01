@@ -36,7 +36,27 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
         raise RuntimeError("supported limit types: {0!r}".format(
                             supported_limit_types))
 
-    data = load_data(low=low_mass, high=high_mass)
+    data = load_data(low=low_mass, high=high_mass, scale_high=0.1)
+
+    if smooth_data:
+        smooth.data(data.low, n=40)
+        smooth.data(data.high, n=40)
+
+    # Computting splitting point based on expected values
+    split_point = 0
+    mass_high_min = min(data.high.keys())
+    for mass_low in sorted(data.low.keys()):
+        if mass_low < mass_high_min:
+            continue
+        mass_high = 0
+        for mass in sorted(data.high.keys()):
+            if mass >= mass_low:
+                mass_high = mass
+                break
+        if data.low[mass_low][0] > data.high[mass_high][0]:
+            print(mass_low, mass_high)
+            split_point = mass_high
+            break
 
     class Limits(object): pass
 
@@ -49,13 +69,6 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
 
     limits.high = copy.deepcopy(limits.low)
     limits.low_fix_observed = copy.deepcopy(limits.low)
-
-    # convert YAML to dictionary
-    split_point = {
-            "narrow": 1000,
-            "wide": 1100,
-            "kk": 1000
-            }.get(limit_type)
 
     (limits.low["visible"],
      limits.low["invisible"]) = get_limits(data.low, is_low_mass=True,
@@ -72,9 +85,6 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
                                                         split_point=split_point,
                                                         low_mass_x=True,
                                                         transform_x=gev_to_tev)
-
-    if smooth_data:
-        smooth.data(limits.high["visible"], n=2)
 
     legend = ROOT.TLegend(0.5, 0.50, 0.80, 0.88)
 
@@ -203,14 +213,13 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
     combo.Draw("3al")
 
     # Split point
-    if limit_type != 'kk':
-        line = ROOT.TGraph(2)
-        line.SetPoint(0, split_point * 1e-3, 1e1)
-        line.SetPoint(1, split_point * 1e-3, 3e-2)
-        line.SetLineColor(ROOT.kGray + 2)
-        line.SetLineStyle(9)
-        line.SetLineWidth(3)
-        line.Draw("L")
+    line = ROOT.TGraph(2)
+    line.SetPoint(0, split_point * 1e-3, 1e1)
+    line.SetPoint(1, split_point * 1e-3, 5e-3)
+    line.SetLineColor(ROOT.kGray + 2)
+    line.SetLineStyle(9)
+    line.SetLineWidth(3)
+    line.Draw("L")
 
     legend.Draw()
 
@@ -218,9 +227,9 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
         cv.SetLogy(True)
 
     if limit_type == 'kk':
-        style.combo(combo, maximum=1e2 if logy else None, ytitle="Upper Limit #sigma_{KK} x B [pb]")
+        style.combo(combo, maximum=4e2 if logy else None, ytitle="Upper Limit #sigma_{g_{KK}} x B [pb]")
     else:
-        style.combo(combo, maximum=1e2 if logy else None)
+        style.combo(combo, maximum=4e2 if logy else None)
 
     style.legend(legend)
     legend.SetTextSize(0.04)

@@ -23,7 +23,7 @@ def combo(obj, xtitle="M_{t#bar{t}} [TeV]",
           ytitle="Upper Limit #sigma_{Z'} x B [pb]", maximum=1e1):
     '''Adjust TMultiGraph style'''
 
-    obj.SetMinimum(3e-2)
+    obj.SetMinimum(5e-3)
 
     if maximum:
         obj.SetMaximum(maximum)
