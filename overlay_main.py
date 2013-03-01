@@ -30,9 +30,9 @@ def parser():
                       action="store_true", default=False,
                       help="verbose yaml convertion")
 
-    parser.add_option("--no-smooth",
+    parser.add_option("--smooth",
                       action="store_true", default=False,
-                      help="Turn-off smoothing")
+                      help="Turn-on smoothing")
 
     return parser
 
@@ -61,7 +61,7 @@ def main():
         from util.overlay import plot
 
         plot(options.type_.lower(), *args, logy=not options.no_log,
-             smooth_data=not options.no_smooth)
+             smooth_data=options.smooth)
     except HelpExit:
         option_parser.print_help()
 
