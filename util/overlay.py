@@ -39,8 +39,8 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
     data = load_data(low=low_mass, high=high_mass, scale_high=0.1)
 
     if smooth_data:
-        smooth.data(data.low, n=40)
-        smooth.data(data.high, n=40)
+        smooth.data(data.low, n=40, log=logy)
+        smooth.data(data.high, n=40, log=logy)
 
     # Computting splitting point based on expected values
     split_point = 0
@@ -143,6 +143,7 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
     graph.SetLineWidth(line_width)
     combo.Add(graph)
 
+
     # observed
     cur = limits.low_fix_observed["visible"]
     graph = ROOT.TGraph(len(cur["observed_x"]), cur["observed_x"], cur["observed"])
@@ -227,7 +228,9 @@ def plot(limit_type, low_mass, high_mass, logy=True, smooth_data=True):
         cv.SetLogy(True)
 
     if limit_type == 'kk':
-        style.combo(combo, maximum=4e2 if logy else None, ytitle="Upper Limit #sigma_{g_{KK}} x B [pb]")
+        style.combo(combo, maximum=4e2 if logy else None,
+                    minimum=1e-2 if logy else None,
+                    ytitle="Upper Limit #sigma_{g_{KK}} x B [pb]")
     else:
         style.combo(combo, maximum=4e2 if logy else None)
 

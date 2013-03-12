@@ -11,7 +11,7 @@ from array import array
 import numpy, math
 from scipy import interpolate
 
-def smooth(x, y, new_x=None, order=1, relunc=0.01):
+def smooth(x, y, new_x=None, log=False, order=2, relunc=0.05):
     '''Smooth y points with B-spline method (see SciPy for details)
 
     The function consists for two steps:
@@ -27,14 +27,16 @@ def smooth(x, y, new_x=None, order=1, relunc=0.01):
     # do nothing if there is insufficient number of points passed
     if 2 > len(x): return y
 
-    y = [math.log(yi) for yi in y]
+    if log: y = [math.log(yi) for yi in y]
 
-    tck = interpolate.splrep(x, y, w=[1.0/(relunc * yi) for yi in y], k=order)
+    tck = interpolate.splrep(x, y, w=[1.0/(relunc * yi) for yi in y], k=order) 
 
-    return [math.exp(yi) for yi in interpolate.splev(new_x if new_x else x, tck)]
+    if log:
+        return [math.exp(yi) for yi in interpolate.splev(new_x, tck)]
+    return interpolate.splev(new_x, tck)
 
 
-def data(data, n=3):
+def data(data, n=3, log=False):
     '''
     Smooth data error bands and expected curve
 
@@ -78,14 +80,14 @@ def data(data, n=3):
 
     # Get new set X's that are evenly spaced in the range [x_min, x_max]
     new_x = list(numpy.linspace(x[0], x[-1], n * len(x)))
-    new_x.extend([e for e in x if not e in new_x]) 
+    new_x.extend([e for e in x if not e in new_x])
     new_x.sort()
 
     # Cache new expected values as the old ones are still neeeded
-    new_expected = smooth(x, limits["expected"], new_x=new_x)
+    new_expected = smooth(x, limits["expected"], new_x=new_x, relunc=0.01)
 
     # Smooth also the observed results
-    new_observed = smooth(x, limits["observed"], new_x=new_x)
+    new_observed = smooth(x, limits["observed"], new_x=new_x, log=log, order=1, relunc=0.01)
 
     # Smooth error bands: need to work with absolute values of Y instead of
     # sigma's
@@ -131,3 +133,4 @@ def data(data, n=3):
         data[mass].append(limits['two_sigma_down'][index])
         data[mass].append(limits['observed'][index])
         index = index + 1
+
