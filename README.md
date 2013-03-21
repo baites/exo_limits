@@ -12,10 +12,10 @@ one and two sigma bands) and plot combined limits plot.
 
 ```bash
 ./overlay_main.py --type narrow yaml/lm_narrow.yaml yaml/hm_narrow.yaml
-# turn off data smoothing
-./overlay_main.py --type narrow yaml/lm_narrow.yaml yaml/hm_narrow.yaml --no-smooth
+# turn on data smoothing
+./overlay_main.py --type narrow yaml/lm_narrow.yaml yaml/hm_narrow.yaml --smooth
 # get help
-./overlay_main.py --type narrow yaml/lm_narrow.yaml yaml/hm_narrow.yaml -h
+./overlay_main.py -h
 ```
 
 ## Input
